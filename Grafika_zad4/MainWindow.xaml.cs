@@ -1169,6 +1169,106 @@ namespace Grafika_zad4
             imgResult.Source = ConvertBitmapToImageSource(imgResultBitmap);
         }
 
+        private void SobelFilter(object sender, RoutedEventArgs e)
+        {
+            if (!ImageExist())
+            {
+                MessageBox.Show("Nie załadowano obrazka!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Zrodlo.
+            Bitmap imgSourceBitmap = ConvertImgToBitmap(imgSource);
+            BitmapData sourceBitmapData = imgSourceBitmap.LockBits(new Rectangle(0, 0, imgSourceBitmap.Width, imgSourceBitmap.Height),
+                                                             ImageLockMode.ReadOnly,
+                                                             System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            byte[] pixelBuffer = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            imgSourceBitmap.UnlockBits(sourceBitmapData);
+
+            byte[] pixelBuffer2 = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+
+            for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
+            {
+                int targetValue = (pixelBuffer[i] + pixelBuffer[i + 1] + pixelBuffer[i + 2]) / 3;
+                pixelBuffer[i] = Convert.ToByte(targetValue);
+                pixelBuffer[i + 1] = Convert.ToByte(targetValue);
+                pixelBuffer[i + 2] = Convert.ToByte(targetValue);
+            }
+
+            for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
+            {
+                // Pierwszy wiersz.
+                if (i <= sourceBitmapData.Stride)
+                {
+                    continue;
+                }
+                // Ostatni wiersz.
+                else if (i >= pixelBuffer.Length - sourceBitmapData.Stride)
+                {
+                    continue;
+                }
+                // Pierwsza kolumna.
+                else if (i % sourceBitmapData.Stride == 0)
+                {
+                    continue;
+                }
+                // Ostatnia kolumna.
+                else if ((i - 4) % sourceBitmapData.Stride == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    try
+                    {
+                        // Pozioma maska.
+                        int sumX = 0;
+                        sumX -= 1 * pixelBuffer[i - sourceBitmapData.Stride - 4];
+                        sumX -= 2 * pixelBuffer[i - sourceBitmapData.Stride];
+                        sumX -= 1 * pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        sumX += 1 * pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        sumX += 2 * pixelBuffer[i + sourceBitmapData.Stride];
+                        sumX += 1 * pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        // Pionowa maska.
+                        int sumY = 0;
+                        sumY -= 1 * pixelBuffer[i - sourceBitmapData.Stride - 4];
+                        sumY += 1 * pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        sumY -= 2 * pixelBuffer[i - 4];
+                        sumY += 2 * pixelBuffer[i + 4];
+                        sumY -= 1 * pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        sumY += 1 * pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        byte result;
+                        if (Math.Abs(sumX) + Math.Abs(sumY) > 255)
+                        {
+                            result = 255;
+                        }
+                        else
+                        {
+                            result = Convert.ToByte(Math.Abs(sumX) + Math.Abs(sumY));
+                        }
+                        pixelBuffer2[i] = result;
+                        pixelBuffer2[i + 1] = result;
+                        pixelBuffer2[i + 2] = result;
+                        pixelBuffer2[i + 3] = 255;
+                    }
+                    catch { }
+                }
+            }
+
+            // Rezultat.
+            Bitmap imgResultBitmap = new Bitmap(imgSourceBitmap.Width, imgSourceBitmap.Height);
+            BitmapData resultBitmapData = imgResultBitmap.LockBits(new Rectangle(0, 0, imgResultBitmap.Width, imgResultBitmap.Height),
+                                                                   ImageLockMode.WriteOnly,
+                                                                   System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            Marshal.Copy(pixelBuffer2, 0, resultBitmapData.Scan0, pixelBuffer2.Length);
+            imgResultBitmap.UnlockBits(resultBitmapData);
+            imgResult.Source = ConvertBitmapToImageSource(imgResultBitmap);
+        }
+
         private Bitmap ConvertImgToBitmap(System.Windows.Controls.Image source)
         {
             RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)source.ActualWidth, (int)source.ActualHeight, 96.0, 96.0, PixelFormats.Pbgra32);
