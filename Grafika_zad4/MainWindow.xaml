@@ -43,7 +43,7 @@
             <Button Margin="0, 1" Width="150" Click="ClearColorsAverage">Średnia</Button>
             <Button Margin="0, 1" Width="150" Click="ClearColorsYUV">YUV</Button>
             <Label FontWeight="Bold" HorizontalAlignment="Center">Filtry:</Label>
-            <Button Margin="0, 1" Width="175">Wygładzający</Button>
+            <Button Margin="0, 1" Width="175" Click="SmoothFilter">Wygładzający</Button>
             <Button Margin="0, 1" Width="175">Medianowy</Button>
             <Button Margin="0, 1" Width="175">Wykrywania krawędzi</Button>
             <Button Margin="0, 1" Width="175">Górnoprzepustowy wyostrzający</Button>
@@ -51,13 +51,13 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
             <StackPanel VerticalAlignment="Center">
-                <Border BorderThickness="1" BorderBrush="Black" Height="200" Width="200" Margin="25, 25, 25, 0">
+                <Border BorderThickness="1" BorderBrush="Black" Height="210" Width="210" Margin="25, 25, 25, 0">
                     <Image Grid.Column="1" Name="imgSource" Height="200" Width="200"></Image>
                 </Border>
                 <Label FontWeight="Bold" HorizontalAlignment="Center">Obraz bazowy</Label>
             </StackPanel>
             <StackPanel VerticalAlignment="Center">
-                <Border BorderThickness="1" BorderBrush="Black" Height="200" Width="200" Margin="25, 25, 25, 0">
+                <Border BorderThickness="1" BorderBrush="Black" Height="210" Width="210" Margin="25, 25, 25, 0">
                     <Image Grid.Column="1" Name="imgResult" Height="200" Width="200"></Image>
                 </Border>
                 <Label FontWeight="Bold" HorizontalAlignment="Center">Obraz zmodyfikowany</Label>
