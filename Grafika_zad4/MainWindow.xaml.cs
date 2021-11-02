@@ -555,21 +555,6 @@ namespace Grafika_zad4
             Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
             imgSourceBitmap.UnlockBits(sourceBitmapData);
 
-            //byte[,] bufferR = new byte[imgSourceBitmap.Height, imgSourceBitmap.Width];
-            //byte[,] bufferG = new byte[imgSourceBitmap.Height, imgSourceBitmap.Width];
-            //byte[,] bufferB = new byte[imgSourceBitmap.Height, imgSourceBitmap.Width];
-            //int i = 0;
-            //for (int y = 0; y < imgSourceBitmap.Height; y++)
-            //{
-            //    for (int x = 0; x < imgSourceBitmap.Width; x++)
-            //    {
-            //        bufferR[y, x] = pixelBuffer[i];
-            //        bufferG[y, x] = pixelBuffer[i+1];
-            //        bufferB[y, x] = pixelBuffer[i+2];
-            //        i += 4;
-            //    }
-            //}
-
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
                 // Pierwszy wiersz.
@@ -578,19 +563,79 @@ namespace Grafika_zad4
                     // Pierwsza kolumna i ostatnia.
                     if (i % sourceBitmapData.Stride == 0)
                     {
-                        pixelBuffer[i] = 255;
-                        pixelBuffer[i + 1] = 0;
-                        pixelBuffer[i + 2] = 0;
-                        pixelBuffer[i + sourceBitmapData.Stride - 4] = 255;
-                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = 0;
-                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = 0;
+                        // B
+                        int sum = 0;
+                        sum += pixelBuffer[i];
+                        sum += pixelBuffer[i + 4];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i] = Convert.ToByte(sum / 4);
+                        // G
+                        sum = 0;
+                        sum += pixelBuffer[i + 1];
+                        sum += pixelBuffer[i + 1 + 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i + 1] = Convert.ToByte(sum / 4);
+                        // R
+                        sum = 0;
+                        sum += pixelBuffer[i + 2];
+                        sum += pixelBuffer[i + 2 + 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i + 2] = Convert.ToByte(sum / 4);
+                        // B
+                        sum = 0;
+                        sum += pixelBuffer[i - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                        pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        // G
+                        sum = 0;
+                        sum += pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        // R
+                        sum = 0;
+                        sum += pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
                     }
                     // Kazda inna kolumna.
                     else
                     {
-                        pixelBuffer[i] = 0;
-                        pixelBuffer[i + 1] = 255;
-                        pixelBuffer[i + 2] = 0;
+                        // B
+                        int sum = 0;
+                        sum += pixelBuffer[i - 4];
+                        sum += pixelBuffer[i];
+                        sum += pixelBuffer[i + 4];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i] = Convert.ToByte(sum / 6);
+                        // G
+                        sum = 0;
+                        sum += pixelBuffer[i + 1 - 4];
+                        sum += pixelBuffer[i + 1];
+                        sum += pixelBuffer[i + 1 + 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i + 1] = Convert.ToByte(sum / 6);
+                        // R
+                        sum = 0;
+                        sum += pixelBuffer[i + 2 - 4];
+                        sum += pixelBuffer[i + 2];
+                        sum += pixelBuffer[i + 2 + 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i + 2] = Convert.ToByte(sum / 6);
                     }
                 }
                 // Ostatni wiersz.
@@ -599,38 +644,187 @@ namespace Grafika_zad4
                     // Pierwsza kolumna i ostatnia.
                     if (i % sourceBitmapData.Stride == 0)
                     {
-                        pixelBuffer[i] = 255;
-                        pixelBuffer[i + 1] = 0;
-                        pixelBuffer[i + 2] = 0;
-                        pixelBuffer[i + sourceBitmapData.Stride - 4] = 255;
-                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = 0;
-                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = 0;
+                        // B
+                        int sum = 0;
+                        sum += pixelBuffer[i - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i];
+                        sum += pixelBuffer[i + 4];
+                        pixelBuffer[i] = Convert.ToByte(sum / 4);
+                        // G
+                        sum = 0;
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i + 1];
+                        sum += pixelBuffer[i + 1 + 4];
+                        pixelBuffer[i + 1] = Convert.ToByte(sum / 4);
+                        // R
+                        sum = 0;
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i + 2];
+                        sum += pixelBuffer[i + 2 + 4];
+                        pixelBuffer[i + 2] = Convert.ToByte(sum / 4);
+                        // B
+                        sum = 0;
+                        sum += pixelBuffer[i - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i - 4];
+                        sum += pixelBuffer[i];
+                        pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        // G
+                        sum = 0;
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
+                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        // R
+                        sum = 0;
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
+                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
                     }
                     // Kazda inna kolumna.
                     else
                     {
-                        pixelBuffer[i] = 0;
-                        pixelBuffer[i + 1] = 255;
-                        pixelBuffer[i + 2] = 0;
+                        // B
+                        int sum = 0;
+                        sum += pixelBuffer[i - sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i - 4];
+                        sum += pixelBuffer[i];
+                        sum += pixelBuffer[i + 4];
+                        pixelBuffer[i] = Convert.ToByte(sum / 6);
+                        // G
+                        sum = 0;
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i + 1 - 4];
+                        sum += pixelBuffer[i + 1];
+                        sum += pixelBuffer[i + 1 + 4];
+                        pixelBuffer[i + 1] = Convert.ToByte(sum / 6);
+                        // R
+                        sum = 0;
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i + 2 - 4];
+                        sum += pixelBuffer[i + 2];
+                        sum += pixelBuffer[i + 2 + 4];
+                        pixelBuffer[i + 2] = Convert.ToByte(sum / 6);
                     }
                 }
-                // Pierwsza kolumna i ostatnia.
+                // Pierwsza kolumna.
                 else if (i % sourceBitmapData.Stride == 0)
                 {
-                    pixelBuffer[i] = 0;
-                    pixelBuffer[i + 1] = 0;
-                    pixelBuffer[i + 2] = 255;
-                    pixelBuffer[i + sourceBitmapData.Stride - 4] = 0;
-                    pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = 0;
-                    pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = 255;
+                    // B
+                    int sum = 0;
+                    sum += pixelBuffer[i - sourceBitmapData.Stride];
+                    sum += pixelBuffer[i - sourceBitmapData.Stride + 4];
+                    sum += pixelBuffer[i];
+                    sum += pixelBuffer[i + 4];
+                    sum += pixelBuffer[i + sourceBitmapData.Stride];
+                    sum += pixelBuffer[i + sourceBitmapData.Stride + 4];
+                    pixelBuffer[i] = Convert.ToByte(sum / 6);
+                    // G
+                    sum = 0;
+                    sum += pixelBuffer[i + 1 - sourceBitmapData.Stride];
+                    sum += pixelBuffer[i + 1 - sourceBitmapData.Stride + 4];
+                    sum += pixelBuffer[i + 1];
+                    sum += pixelBuffer[i + 1 + 4];
+                    sum += pixelBuffer[i + 1 + sourceBitmapData.Stride];
+                    sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + 4];
+                    pixelBuffer[i + 1] = Convert.ToByte(sum / 6);
+                    // R
+                    sum = 0;
+                    sum += pixelBuffer[i + 2 - sourceBitmapData.Stride];
+                    sum += pixelBuffer[i + 2 - sourceBitmapData.Stride + 4];
+                    sum += pixelBuffer[i + 2];
+                    sum += pixelBuffer[i + 2 + 4];
+                    sum += pixelBuffer[i + 2 + sourceBitmapData.Stride];
+                    sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + 4];
+                    pixelBuffer[i + 2] = Convert.ToByte(sum / 6);
+                    // B
+                    sum = 0;
+                    sum += pixelBuffer[i - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                    pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
+                    // G
+                    sum = 0;
+                    sum += pixelBuffer[i + 1 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 1 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                    pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
+                    // R
+                    sum = 0;
+                    sum += pixelBuffer[i + 2 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 2 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
+                    sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
+                    pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
                 }
-
-                //// B
-                //pixelBuffer[i] = 0;
-                //// G
-                //pixelBuffer[i + 1] = 0;
-                //// R
-                //pixelBuffer[i + 2] = 255;
+                // Ostatnia kolumna.
+                else if ((i - 4) % sourceBitmapData.Stride == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    try
+                    {
+                        // B
+                        int sum = 0;
+                        sum += pixelBuffer[i - sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i - 4];
+                        sum += pixelBuffer[i];
+                        sum += pixelBuffer[i + 4];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i] = Convert.ToByte(sum / 9);
+                        // G
+                        sum = 0;
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 1 - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i + 1 - 4];
+                        sum += pixelBuffer[i + 1];
+                        sum += pixelBuffer[i + 1 + 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i + 1] = Convert.ToByte(sum / 9);
+                        // R
+                        sum = 0;
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 2 - sourceBitmapData.Stride + 4];
+                        sum += pixelBuffer[i + 2 - 4];
+                        sum += pixelBuffer[i + 2];
+                        sum += pixelBuffer[i + 2 + 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride];
+                        sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + 4];
+                        pixelBuffer[i + 2] = Convert.ToByte(sum / 9);
+                    }
+                    catch {}
+                }
             }
 
 
