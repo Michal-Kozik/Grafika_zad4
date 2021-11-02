@@ -44,7 +44,7 @@
             <Button Margin="0, 1" Width="150" Click="ClearColorsYUV">YUV</Button>
             <Label FontWeight="Bold" HorizontalAlignment="Center">Filtry:</Label>
             <Button Margin="0, 1" Width="175" Click="SmoothFilter">Wygładzający</Button>
-            <Button Margin="0, 1" Width="175">Medianowy</Button>
+            <Button Margin="0, 1" Width="175" Click="MedianFilter">Medianowy</Button>
             <Button Margin="0, 1" Width="175">Wykrywania krawędzi</Button>
             <Button Margin="0, 1" Width="175">Górnoprzepustowy wyostrzający</Button>
             <Button Margin="0, 1" Width="175">Rozmycie gaussowskie</Button>

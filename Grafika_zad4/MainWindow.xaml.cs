@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Grafika_zad4
 {
@@ -824,6 +825,335 @@ namespace Grafika_zad4
                         pixelBuffer[i + 2] = Convert.ToByte(sum / 9);
                     }
                     catch {}
+                }
+            }
+
+
+            // Rezultat.
+            Bitmap imgResultBitmap = new Bitmap(imgSourceBitmap.Width, imgSourceBitmap.Height);
+            BitmapData resultBitmapData = imgResultBitmap.LockBits(new Rectangle(0, 0, imgResultBitmap.Width, imgResultBitmap.Height),
+                                                                   ImageLockMode.WriteOnly,
+                                                                   System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            Marshal.Copy(pixelBuffer, 0, resultBitmapData.Scan0, pixelBuffer.Length);
+            imgResultBitmap.UnlockBits(resultBitmapData);
+            imgResult.Source = ConvertBitmapToImageSource(imgResultBitmap);
+        }
+
+        private void MedianFilter(object sender, RoutedEventArgs e)
+        {
+            if (!ImageExist())
+            {
+                MessageBox.Show("Nie załadowano obrazka!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Zrodlo.
+            Bitmap imgSourceBitmap = ConvertImgToBitmap(imgSource);
+            BitmapData sourceBitmapData = imgSourceBitmap.LockBits(new Rectangle(0, 0, imgSourceBitmap.Width, imgSourceBitmap.Height),
+                                                             ImageLockMode.ReadOnly,
+                                                             System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            byte[] pixelBuffer = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            imgSourceBitmap.UnlockBits(sourceBitmapData);
+
+            for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
+            {
+                // Pierwszy wiersz.
+                if (i <= sourceBitmapData.Stride)
+                {
+                    // Pierwsza kolumna i ostatnia.
+                    if (i % sourceBitmapData.Stride == 0)
+                    {
+                        // B
+                        List<byte> list = new List<byte>();
+                        list.Add(pixelBuffer[i]);
+                        list.Add(pixelBuffer[i + 4]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[2]);
+                        // G
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 1]);
+                        list.Add(pixelBuffer[i + 1 + 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[2]);
+                        // R
+                        list = new List<byte>(); ;
+                        list.Add(pixelBuffer[i + 2]);
+                        list.Add(pixelBuffer[i + 2 + 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[2]);
+                        // B
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                        list.Sort();
+                        pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        // G
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                        list.Sort();
+                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        // R
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                        list.Sort();
+                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                    }
+                    // Kazda inna kolumna.
+                    else
+                    {
+                        // B
+                        List<byte> list = new List<byte>();
+                        list.Add(pixelBuffer[i - 4]);
+                        list.Add(pixelBuffer[i]);
+                        list.Add(pixelBuffer[i + 4]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[3]);
+                        // G
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 1 - 4]);
+                        list.Add(pixelBuffer[i + 1]);
+                        list.Add(pixelBuffer[i + 1 + 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[3]);
+                        // R
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 2 - 4]);
+                        list.Add(pixelBuffer[i + 2]);
+                        list.Add(pixelBuffer[i + 2 + 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[3]);
+                    }
+                }
+                // Ostatni wiersz.
+                else if (i >= pixelBuffer.Length - sourceBitmapData.Stride)
+                {
+                    // Pierwsza kolumna i ostatnia.
+                    if (i % sourceBitmapData.Stride == 0)
+                    {
+                        // B
+                        List<byte> list = new List<byte>();
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i]);
+                        list.Add(pixelBuffer[i + 4]);
+                        list.Sort();
+                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[2]);
+                        // G
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i + 1]);
+                        list.Add(pixelBuffer[i + 1 + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[2]);
+                        // R
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i + 2]);
+                        list.Add(pixelBuffer[i + 2 + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[2]);
+                        // B
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i - 4]);
+                        list.Add(pixelBuffer[i]);
+                        list.Sort();
+                        pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        // G
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4]);
+                        list.Sort();
+                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        // R
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4]);
+                        list.Sort();
+                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                    }
+                    // Kazda inna kolumna.
+                    else
+                    {
+                        // B
+                        List<byte> list = new List<byte>();
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i - 4]);
+                        list.Add(pixelBuffer[i]);
+                        list.Add(pixelBuffer[i + 4]);
+                        list.Sort();
+                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[3]);
+                        // G
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i + 1 - 4]);
+                        list.Add(pixelBuffer[i + 1]);
+                        list.Add(pixelBuffer[i + 1 + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[3]);
+                        // R
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i + 2 - 4]);
+                        list.Add(pixelBuffer[i + 2]);
+                        list.Add(pixelBuffer[i + 2 + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[3]);
+                    }
+                }
+                // Pierwsza kolumna.
+                else if (i % sourceBitmapData.Stride == 0)
+                {
+                    // B
+                    List<byte> list = new List<byte>();
+                    list.Add(pixelBuffer[i - sourceBitmapData.Stride]);
+                    list.Add(pixelBuffer[i - sourceBitmapData.Stride + 4]);
+                    list.Add(pixelBuffer[i]);
+                    list.Add(pixelBuffer[i + 4]);
+                    list.Add(pixelBuffer[i + sourceBitmapData.Stride]);
+                    list.Add(pixelBuffer[i + sourceBitmapData.Stride + 4]);
+                    list.Sort();
+                    pixelBuffer[i] = Convert.ToByte(list.ToArray()[3]);
+                    // G
+                    list = new List<byte>();
+                    list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride]);
+                    list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride + 4]);
+                    list.Add(pixelBuffer[i + 1]);
+                    list.Add(pixelBuffer[i + 1 + 4]);
+                    list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride]);
+                    list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + 4]);
+                    list.Sort();
+                    pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[3]);
+                    // R
+                    list = new List<byte>();
+                    list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride]);
+                    list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride + 4]);
+                    list.Add(pixelBuffer[i + 2]);
+                    list.Add(pixelBuffer[i + 2 + 4]);
+                    list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride]);
+                    list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + 4]);
+                    list.Sort();
+                    pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[3]);
+                    // B
+                    list = new List<byte>();
+                    list.Add(pixelBuffer[i - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i - sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                    list.Sort();
+                    pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
+                    // G
+                    list = new List<byte>();
+                    list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                    list.Sort();
+                    pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
+                    // R
+                    list = new List<byte>();
+                    list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
+                    list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
+                    list.Sort();
+                    pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
+                }
+                // Ostatnia kolumna.
+                else if ((i - 4) % sourceBitmapData.Stride == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    try
+                    {
+                        // B
+                        List<byte> list = new List<byte>();
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i - 4]);
+                        list.Add(pixelBuffer[i]);
+                        list.Add(pixelBuffer[i + 4]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[4]);
+                        // G
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i + 1 - 4]);
+                        list.Add(pixelBuffer[i + 1]);
+                        list.Add(pixelBuffer[i + 1 + 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[4]);
+                        // R
+                        list = new List<byte>();
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride + 4]);
+                        list.Add(pixelBuffer[i + 2 - 4]);
+                        list.Add(pixelBuffer[i + 2]);
+                        list.Add(pixelBuffer[i + 2 + 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride]);
+                        list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + 4]);
+                        list.Sort();
+                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[4]);
+                    }
+                    catch { }
                 }
             }
 
