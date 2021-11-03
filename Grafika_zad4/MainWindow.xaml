@@ -46,8 +46,8 @@
             <Button Margin="0, 1" Width="175" Click="SmoothFilter">Wygładzający</Button>
             <Button Margin="0, 1" Width="175" Click="MedianFilter">Medianowy</Button>
             <Button Margin="0, 1" Width="175" Click="SobelFilter">Sobel</Button>
-            <Button Margin="0, 1" Width="175">Górnoprzepustowy wyostrzający</Button>
-            <Button Margin="0, 1" Width="175">Rozmycie gaussowskie</Button>
+            <Button Margin="0, 1" Width="175" Click="SharpenFilter">Górnoprzepustowy wyostrzający</Button>
+            <Button Margin="0, 1" Width="175" Click="GaussFilter">Rozmycie gaussowskie</Button>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
             <StackPanel VerticalAlignment="Center">

@@ -1185,10 +1185,10 @@ namespace Grafika_zad4
 
             byte[] pixelBuffer = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
             Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
-            imgSourceBitmap.UnlockBits(sourceBitmapData);
-
-            byte[] pixelBuffer2 = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            
+            byte[] pixelBufferResult = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
             Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            imgSourceBitmap.UnlockBits(sourceBitmapData);
 
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
@@ -1249,10 +1249,10 @@ namespace Grafika_zad4
                         {
                             result = Convert.ToByte(Math.Abs(sumX) + Math.Abs(sumY));
                         }
-                        pixelBuffer2[i] = result;
-                        pixelBuffer2[i + 1] = result;
-                        pixelBuffer2[i + 2] = result;
-                        pixelBuffer2[i + 3] = 255;
+                        pixelBufferResult[i] = result;
+                        pixelBufferResult[i + 1] = result;
+                        pixelBufferResult[i + 2] = result;
+                        pixelBufferResult[i + 3] = 255;
                     }
                     catch { }
                 }
@@ -1264,7 +1264,199 @@ namespace Grafika_zad4
                                                                    ImageLockMode.WriteOnly,
                                                                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            Marshal.Copy(pixelBuffer2, 0, resultBitmapData.Scan0, pixelBuffer2.Length);
+            Marshal.Copy(pixelBufferResult, 0, resultBitmapData.Scan0, pixelBufferResult.Length);
+            imgResultBitmap.UnlockBits(resultBitmapData);
+            imgResult.Source = ConvertBitmapToImageSource(imgResultBitmap);
+        }
+
+        private void SharpenFilter(object sender, RoutedEventArgs e)
+        {
+            if (!ImageExist())
+            {
+                MessageBox.Show("Nie załadowano obrazka!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Zrodlo.
+            Bitmap imgSourceBitmap = ConvertImgToBitmap(imgSource);
+            BitmapData sourceBitmapData = imgSourceBitmap.LockBits(new Rectangle(0, 0, imgSourceBitmap.Width, imgSourceBitmap.Height),
+                                                             ImageLockMode.ReadOnly,
+                                                             System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            byte[] pixelBuffer = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+
+            byte[] pixelBufferResult = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            imgSourceBitmap.UnlockBits(sourceBitmapData);
+
+            for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
+            {
+                int targetValue = (pixelBuffer[i] + pixelBuffer[i + 1] + pixelBuffer[i + 2]) / 3;
+                pixelBuffer[i] = Convert.ToByte(targetValue);
+                pixelBuffer[i + 1] = Convert.ToByte(targetValue);
+                pixelBuffer[i + 2] = Convert.ToByte(targetValue);
+            }
+
+            for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
+            {
+                // Pierwszy wiersz.
+                if (i <= sourceBitmapData.Stride)
+                {
+                    continue;
+                }
+                // Ostatni wiersz.
+                else if (i >= pixelBuffer.Length - sourceBitmapData.Stride)
+                {
+                    continue;
+                }
+                // Pierwsza kolumna.
+                else if (i % sourceBitmapData.Stride == 0)
+                {
+                    continue;
+                }
+                // Ostatnia kolumna.
+                else if ((i - 4) % sourceBitmapData.Stride == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    try
+                    {
+                        // Maska
+                        int sum = 0;
+                        sum -= pixelBuffer[i - sourceBitmapData.Stride - 4];
+                        sum -= pixelBuffer[i - sourceBitmapData.Stride];
+                        sum -= pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        sum -= pixelBuffer[i - 4];
+                        sum += 9 * pixelBuffer[i];
+                        sum -= pixelBuffer[i + 4];
+                        sum -= pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        sum -= pixelBuffer[i + sourceBitmapData.Stride];
+                        sum -= pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        if (Math.Abs(sum) > 255)
+                        {
+                            sum = 255;
+                        }
+                        pixelBufferResult[i] = Convert.ToByte(Math.Abs(sum));
+                        pixelBufferResult[i + 1] = Convert.ToByte(Math.Abs(sum));
+                        pixelBufferResult[i + 2] = Convert.ToByte(Math.Abs(sum));
+                        pixelBufferResult[i + 3] = 255;
+                    }
+                    catch { }
+                }
+            }
+
+            // Rezultat.
+            Bitmap imgResultBitmap = new Bitmap(imgSourceBitmap.Width, imgSourceBitmap.Height);
+            BitmapData resultBitmapData = imgResultBitmap.LockBits(new Rectangle(0, 0, imgResultBitmap.Width, imgResultBitmap.Height),
+                                                                   ImageLockMode.WriteOnly,
+                                                                   System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            Marshal.Copy(pixelBufferResult, 0, resultBitmapData.Scan0, pixelBufferResult.Length);
+            imgResultBitmap.UnlockBits(resultBitmapData);
+            imgResult.Source = ConvertBitmapToImageSource(imgResultBitmap);
+        }
+
+        private void GaussFilter(object sender, RoutedEventArgs e)
+        {
+            if (!ImageExist())
+            {
+                MessageBox.Show("Nie załadowano obrazka!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Zrodlo.
+            Bitmap imgSourceBitmap = ConvertImgToBitmap(imgSource);
+            BitmapData sourceBitmapData = imgSourceBitmap.LockBits(new Rectangle(0, 0, imgSourceBitmap.Width, imgSourceBitmap.Height),
+                                                             ImageLockMode.ReadOnly,
+                                                             System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            byte[] pixelBuffer = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+
+            byte[] pixelBufferResult = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+            imgSourceBitmap.UnlockBits(sourceBitmapData);
+
+            for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
+            {
+                // Pierwszy wiersz.
+                if (i <= sourceBitmapData.Stride)
+                {
+                    continue;
+                }
+                // Ostatni wiersz.
+                else if (i >= pixelBuffer.Length - sourceBitmapData.Stride)
+                {
+                    continue;
+                }
+                // Pierwsza kolumna.
+                else if (i % sourceBitmapData.Stride == 0)
+                {
+                    continue;
+                }
+                // Ostatnia kolumna.
+                else if ((i - 4) % sourceBitmapData.Stride == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    try
+                    {
+                        // Maska
+                        // B
+                        int sumB = 0;
+                        sumB += pixelBuffer[i - sourceBitmapData.Stride - 4];
+                        sumB += 2 * pixelBuffer[i - sourceBitmapData.Stride];
+                        sumB += pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        sumB += 2 * pixelBuffer[i - 4];
+                        sumB += 4 * pixelBuffer[i];
+                        sumB += 2 * pixelBuffer[i + 4];
+                        sumB += pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        sumB += 2 * pixelBuffer[i + sourceBitmapData.Stride];
+                        sumB += pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        // G
+                        int sumG = 0;
+                        sumG += pixelBuffer[i+1 - sourceBitmapData.Stride - 4];
+                        sumG += 2 * pixelBuffer[i+1 - sourceBitmapData.Stride];
+                        sumG += pixelBuffer[i+1 - sourceBitmapData.Stride + 4];
+                        sumG += 2 * pixelBuffer[i+1 - 4];
+                        sumG += 4 * pixelBuffer[i+1];
+                        sumG += 2 * pixelBuffer[i+1 + 4];
+                        sumG += pixelBuffer[i+1 + sourceBitmapData.Stride - 4];
+                        sumG += 2 * pixelBuffer[i+1 + sourceBitmapData.Stride];
+                        sumG += pixelBuffer[i+1 + sourceBitmapData.Stride + 4];
+                        // R
+                        int sumR = 0;
+                        sumR += pixelBuffer[i+2 - sourceBitmapData.Stride - 4];
+                        sumR += 2 * pixelBuffer[i+2 - sourceBitmapData.Stride];
+                        sumR += pixelBuffer[i+2 - sourceBitmapData.Stride + 4];
+                        sumR += 2 * pixelBuffer[i+2 - 4];
+                        sumR += 4 * pixelBuffer[i+2];
+                        sumR += 2 * pixelBuffer[i+2 + 4];
+                        sumR += pixelBuffer[i+2 + sourceBitmapData.Stride - 4];
+                        sumR += 2 * pixelBuffer[i+2 + sourceBitmapData.Stride];
+                        sumR += pixelBuffer[i+2 + sourceBitmapData.Stride + 4];
+
+                        pixelBufferResult[i] = Convert.ToByte(Math.Floor(sumB / 16.0));
+                        pixelBufferResult[i + 1] = Convert.ToByte(Math.Floor(sumG / 16.0));
+                        pixelBufferResult[i + 2] = Convert.ToByte(Math.Floor(sumR / 16.0));
+                        pixelBufferResult[i + 3] = 255;
+                    }
+                    catch { }
+                }
+            }
+
+            // Rezultat.
+            Bitmap imgResultBitmap = new Bitmap(imgSourceBitmap.Width, imgSourceBitmap.Height);
+            BitmapData resultBitmapData = imgResultBitmap.LockBits(new Rectangle(0, 0, imgResultBitmap.Width, imgResultBitmap.Height),
+                                                                   ImageLockMode.WriteOnly,
+                                                                   System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            Marshal.Copy(pixelBufferResult, 0, resultBitmapData.Scan0, pixelBufferResult.Length);
             imgResultBitmap.UnlockBits(resultBitmapData);
             imgResult.Source = ConvertBitmapToImageSource(imgResultBitmap);
         }
