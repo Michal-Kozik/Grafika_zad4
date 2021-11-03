@@ -51,9 +51,9 @@ namespace Grafika_zad4
                 return false;
             if (!Double.TryParse(inputR.Text, out double resultR))
                 return false;
-            if (!Double.TryParse(inputR.Text, out double resultG))
+            if (!Double.TryParse(inputG.Text, out double resultG))
                 return false;
-            if (!Double.TryParse(inputR.Text, out double resultB))
+            if (!Double.TryParse(inputB.Text, out double resultB))
                 return false;
             if (resultR < 0 || resultG < 0 || resultB < 0 || resultR > 255 || resultG > 255 || resultB > 255)
                 return false;
@@ -105,14 +105,14 @@ namespace Grafika_zad4
             byte inputBlue = Convert.ToByte(inputB.Text);
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
-                // R
-                if (pixelBuffer[i] + inputRed > 255)
+                // B
+                if (pixelBuffer[i] + inputBlue > 255)
                 {
                     pixelBuffer[i] = 255;
                 } 
                 else
                 {
-                    pixelBuffer[i] += inputRed;
+                    pixelBuffer[i] += inputBlue;
                 }
                 // G
                 if (pixelBuffer[i+1] + inputGreen > 255)
@@ -123,14 +123,14 @@ namespace Grafika_zad4
                 {
                     pixelBuffer[i+1] += inputGreen;
                 }
-                // B
-                if (pixelBuffer[i+2] + inputBlue > 255)
+                // R
+                if (pixelBuffer[i+2] + inputRed > 255)
                 {
                     pixelBuffer[i+2] = 255;
                 }
                 else
                 {
-                    pixelBuffer[i+2] += inputBlue;
+                    pixelBuffer[i+2] += inputRed;
                 }
             }
 
@@ -173,14 +173,14 @@ namespace Grafika_zad4
             byte inputBlue = Convert.ToByte(inputB.Text);
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
-                // R
-                if (pixelBuffer[i] - inputRed < 0)
+                // B
+                if (pixelBuffer[i] - inputBlue < 0)
                 {
                     pixelBuffer[i] = 0;
                 }
                 else
                 {
-                    pixelBuffer[i] -= inputRed;
+                    pixelBuffer[i] -= inputBlue;
                 }
                 // G
                 if (pixelBuffer[i + 1] - inputGreen > 255)
@@ -191,14 +191,14 @@ namespace Grafika_zad4
                 {
                     pixelBuffer[i + 1] -= inputGreen;
                 }
-                // B
-                if (pixelBuffer[i + 2] - inputBlue > 255)
+                // R
+                if (pixelBuffer[i + 2] - inputRed > 255)
                 {
                     pixelBuffer[i + 2] = 255;
                 }
                 else
                 {
-                    pixelBuffer[i + 2] -= inputBlue;
+                    pixelBuffer[i + 2] -= inputRed;
                 }
             }
 
@@ -241,14 +241,14 @@ namespace Grafika_zad4
             double inputBlue = Double.Parse(inputB.Text);
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
-                // R
-                if (pixelBuffer[i] * inputRed > 255)
+                // B
+                if (pixelBuffer[i] * inputBlue > 255)
                 {
                     pixelBuffer[i] = 255;
                 }
                 else
                 {
-                    pixelBuffer[i] = Convert.ToByte(Math.Round(pixelBuffer[i] * inputRed, 0));
+                    pixelBuffer[i] = Convert.ToByte(Math.Round(pixelBuffer[i] * inputBlue, 0));
                 }
                 // G
                 if (pixelBuffer[i + 1] * inputGreen > 255)
@@ -259,14 +259,14 @@ namespace Grafika_zad4
                 {
                     pixelBuffer[i + 1] = Convert.ToByte(Math.Round(pixelBuffer[i+1] * inputGreen, 0));
                 }
-                // B
-                if (pixelBuffer[i + 2] * inputBlue > 255)
+                // R
+                if (pixelBuffer[i + 2] * inputRed > 255)
                 {
                     pixelBuffer[i + 2] = 255;
                 }
                 else
                 {
-                    pixelBuffer[i + 2] = Convert.ToByte(Math.Round(pixelBuffer[i+2] * inputBlue, 0));
+                    pixelBuffer[i + 2] = Convert.ToByte(Math.Round(pixelBuffer[i+2] * inputRed, 0));
                 }
             }
 
@@ -314,14 +314,14 @@ namespace Grafika_zad4
             double inputBlue = Double.Parse(inputB.Text);
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
-                // R
-                if (pixelBuffer[i] / inputRed > 255)
+                // B
+                if (pixelBuffer[i] / inputBlue > 255)
                 {
                     pixelBuffer[i] = 255;
                 }
                 else
                 {
-                    pixelBuffer[i] = Convert.ToByte(Math.Round(pixelBuffer[i] / inputRed, 0));
+                    pixelBuffer[i] = Convert.ToByte(Math.Round(pixelBuffer[i] / inputBlue, 0));
                 }
                 // G
                 if (pixelBuffer[i + 1] / inputGreen > 255)
@@ -332,14 +332,14 @@ namespace Grafika_zad4
                 {
                     pixelBuffer[i+1] = Convert.ToByte(Math.Round(pixelBuffer[i+1] / inputGreen, 0));
                 }
-                // B
-                if (pixelBuffer[i + 2] / inputBlue > 255)
+                // R
+                if (pixelBuffer[i + 2] / inputRed > 255)
                 {
                     pixelBuffer[i + 2] = 255;
                 }
                 else
                 {
-                    pixelBuffer[i+2] = Convert.ToByte(Math.Round(pixelBuffer[i+2] / inputBlue, 0));
+                    pixelBuffer[i+2] = Convert.ToByte(Math.Round(pixelBuffer[i+2] / inputRed, 0));
                 }
             }
 
@@ -374,7 +374,7 @@ namespace Grafika_zad4
 
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
-                // R
+                // B
                 if (sliderBrightness.Value < 0)
                 {
                     int absoluteValue = Math.Abs((int)sliderBrightness.Value);
@@ -422,7 +422,7 @@ namespace Grafika_zad4
                         pixelBuffer[i+1] += Convert.ToByte(sliderBrightness.Value);
                     }
                 }
-                // B
+                // R
                 if (sliderBrightness.Value < 0)
                 {
                     int absoluteValue = Math.Abs((int)sliderBrightness.Value);
@@ -480,11 +480,11 @@ namespace Grafika_zad4
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
                 int targetValue = (pixelBuffer[i] + pixelBuffer[i+1] + pixelBuffer[i+2]) / 3;
-                // R
+                // B
                 pixelBuffer[i] = Convert.ToByte(targetValue);
                 // G
                 pixelBuffer[i+1] = Convert.ToByte(targetValue);
-                // B
+                // R
                 pixelBuffer[i+2] = Convert.ToByte(targetValue);
             }
 
@@ -519,12 +519,12 @@ namespace Grafika_zad4
 
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
-                // R
-                pixelBuffer[i] = Convert.ToByte(0.299 * pixelBuffer[i] + 0.587 * pixelBuffer[i+1] + 0.114 * pixelBuffer[i+2]);
-                // G
-                pixelBuffer[i + 1] = Convert.ToByte(0.299 * pixelBuffer[i] + 0.587 * pixelBuffer[i+1] + 0.114 * pixelBuffer[i+2]);
                 // B
-                pixelBuffer[i + 2] = Convert.ToByte(0.299 * pixelBuffer[i] + 0.587 * pixelBuffer[i+1] + 0.114 * pixelBuffer[i+2]);
+                pixelBuffer[i] = Convert.ToByte(0.114 * pixelBuffer[i] + 0.587 * pixelBuffer[i+1] + 0.299 * pixelBuffer[i+2]);
+                // G
+                pixelBuffer[i + 1] = Convert.ToByte(0.114 * pixelBuffer[i] + 0.587 * pixelBuffer[i+1] + 0.299 * pixelBuffer[i+2]);
+                // R
+                pixelBuffer[i + 2] = Convert.ToByte(0.114 * pixelBuffer[i] + 0.587 * pixelBuffer[i+1] + 0.299 * pixelBuffer[i+2]);
             }
 
             // Rezultat.
@@ -554,10 +554,17 @@ namespace Grafika_zad4
 
             byte[] pixelBuffer = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
             Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+
+            byte[] pixelBufferResult = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
             imgSourceBitmap.UnlockBits(sourceBitmapData);
 
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
+                pixelBufferResult[i ] = 255;
+                pixelBufferResult[i + 1] = 255;
+                pixelBufferResult[i + 2] = 255;
+                pixelBufferResult[i + 3] = 255;
                 // Pierwszy wiersz.
                 if (i <= sourceBitmapData.Stride)
                 {
@@ -570,42 +577,42 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + 4];
                         sum += pixelBuffer[i + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i] = Convert.ToByte(sum / 4);
                         // G
                         sum = 0;
                         sum += pixelBuffer[i + 1];
                         sum += pixelBuffer[i + 1 + 4];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i + 1] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + 1] = Convert.ToByte(sum / 4);
                         // R
                         sum = 0;
                         sum += pixelBuffer[i + 2];
                         sum += pixelBuffer[i + 2 + 4];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i + 2] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + 2] = Convert.ToByte(sum / 4);
                         // B
                         sum = 0;
                         sum += pixelBuffer[i - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
-                        pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
                         // G
                         sum = 0;
                         sum += pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
-                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
                         // R
                         sum = 0;
                         sum += pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
-                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
                     }
                     // Kazda inna kolumna.
                     else
@@ -618,7 +625,7 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i] = Convert.ToByte(sum / 6);
+                        pixelBufferResult[i] = Convert.ToByte(sum / 6);
                         // G
                         sum = 0;
                         sum += pixelBuffer[i + 1 - 4];
@@ -627,7 +634,7 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i + 1] = Convert.ToByte(sum / 6);
+                        pixelBufferResult[i + 1] = Convert.ToByte(sum / 6);
                         // R
                         sum = 0;
                         sum += pixelBuffer[i + 2 - 4];
@@ -636,7 +643,7 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i + 2] = Convert.ToByte(sum / 6);
+                        pixelBufferResult[i + 2] = Convert.ToByte(sum / 6);
                     }
                 }
                 // Ostatni wiersz.
@@ -651,42 +658,42 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i - sourceBitmapData.Stride + 4];
                         sum += pixelBuffer[i];
                         sum += pixelBuffer[i + 4];
-                        pixelBuffer[i] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i] = Convert.ToByte(sum / 4);
                         // G
                         sum = 0;
                         sum += pixelBuffer[i + 1 - sourceBitmapData.Stride];
                         sum += pixelBuffer[i + 1 - sourceBitmapData.Stride + 4];
                         sum += pixelBuffer[i + 1];
                         sum += pixelBuffer[i + 1 + 4];
-                        pixelBuffer[i + 1] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + 1] = Convert.ToByte(sum / 4);
                         // R
                         sum = 0;
                         sum += pixelBuffer[i + 2 - sourceBitmapData.Stride];
                         sum += pixelBuffer[i + 2 - sourceBitmapData.Stride + 4];
                         sum += pixelBuffer[i + 2];
                         sum += pixelBuffer[i + 2 + 4];
-                        pixelBuffer[i + 2] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + 2] = Convert.ToByte(sum / 4);
                         // B
                         sum = 0;
                         sum += pixelBuffer[i - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i - 4];
                         sum += pixelBuffer[i];
-                        pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
                         // G
                         sum = 0;
                         sum += pixelBuffer[i + 1 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 1 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
-                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
                         // R
                         sum = 0;
                         sum += pixelBuffer[i + 2 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 2 - sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
-                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
+                        pixelBufferResult[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 4);
                     }
                     // Kazda inna kolumna.
                     else
@@ -699,7 +706,7 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i - 4];
                         sum += pixelBuffer[i];
                         sum += pixelBuffer[i + 4];
-                        pixelBuffer[i] = Convert.ToByte(sum / 6);
+                        pixelBufferResult[i] = Convert.ToByte(sum / 6);
                         // G
                         sum = 0;
                         sum += pixelBuffer[i + 1 - sourceBitmapData.Stride - 4];
@@ -708,7 +715,7 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + 1 - 4];
                         sum += pixelBuffer[i + 1];
                         sum += pixelBuffer[i + 1 + 4];
-                        pixelBuffer[i + 1] = Convert.ToByte(sum / 6);
+                        pixelBufferResult[i + 1] = Convert.ToByte(sum / 6);
                         // R
                         sum = 0;
                         sum += pixelBuffer[i + 2 - sourceBitmapData.Stride - 4];
@@ -717,7 +724,7 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + 2 - 4];
                         sum += pixelBuffer[i + 2];
                         sum += pixelBuffer[i + 2 + 4];
-                        pixelBuffer[i + 2] = Convert.ToByte(sum / 6);
+                        pixelBufferResult[i + 2] = Convert.ToByte(sum / 6);
                     }
                 }
                 // Pierwsza kolumna.
@@ -731,7 +738,7 @@ namespace Grafika_zad4
                     sum += pixelBuffer[i + 4];
                     sum += pixelBuffer[i + sourceBitmapData.Stride];
                     sum += pixelBuffer[i + sourceBitmapData.Stride + 4];
-                    pixelBuffer[i] = Convert.ToByte(sum / 6);
+                    pixelBufferResult[i] = Convert.ToByte(sum / 6);
                     // G
                     sum = 0;
                     sum += pixelBuffer[i + 1 - sourceBitmapData.Stride];
@@ -740,7 +747,7 @@ namespace Grafika_zad4
                     sum += pixelBuffer[i + 1 + 4];
                     sum += pixelBuffer[i + 1 + sourceBitmapData.Stride];
                     sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + 4];
-                    pixelBuffer[i + 1] = Convert.ToByte(sum / 6);
+                    pixelBufferResult[i + 1] = Convert.ToByte(sum / 6);
                     // R
                     sum = 0;
                     sum += pixelBuffer[i + 2 - sourceBitmapData.Stride];
@@ -749,7 +756,7 @@ namespace Grafika_zad4
                     sum += pixelBuffer[i + 2 + 4];
                     sum += pixelBuffer[i + 2 + sourceBitmapData.Stride];
                     sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + 4];
-                    pixelBuffer[i + 2] = Convert.ToByte(sum / 6);
+                    pixelBufferResult[i + 2] = Convert.ToByte(sum / 6);
                     // B
                     sum = 0;
                     sum += pixelBuffer[i - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
@@ -758,7 +765,7 @@ namespace Grafika_zad4
                     sum += pixelBuffer[i + sourceBitmapData.Stride - 4];
                     sum += pixelBuffer[i + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                     sum += pixelBuffer[i + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
-                    pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
+                    pixelBufferResult[i + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
                     // G
                     sum = 0;
                     sum += pixelBuffer[i + 1 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
@@ -767,7 +774,7 @@ namespace Grafika_zad4
                     sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
                     sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                     sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
-                    pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
+                    pixelBufferResult[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
                     // R
                     sum = 0;
                     sum += pixelBuffer[i + 2 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
@@ -776,7 +783,7 @@ namespace Grafika_zad4
                     sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
                     sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4];
                     sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4];
-                    pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
+                    pixelBufferResult[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(sum / 6);
                 }
                 // Ostatnia kolumna.
                 else if ((i - 4) % sourceBitmapData.Stride == 0)
@@ -798,7 +805,7 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i] = Convert.ToByte(sum / 9);
+                        pixelBufferResult[i] = Convert.ToByte(sum / 9);
                         // G
                         sum = 0;
                         sum += pixelBuffer[i + 1 - sourceBitmapData.Stride - 4];
@@ -810,7 +817,7 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + 1 + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i + 1] = Convert.ToByte(sum / 9);
+                        pixelBufferResult[i + 1] = Convert.ToByte(sum / 9);
                         // R
                         sum = 0;
                         sum += pixelBuffer[i + 2 - sourceBitmapData.Stride - 4];
@@ -822,9 +829,9 @@ namespace Grafika_zad4
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride - 4];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride];
                         sum += pixelBuffer[i + 2 + sourceBitmapData.Stride + 4];
-                        pixelBuffer[i + 2] = Convert.ToByte(sum / 9);
+                        pixelBufferResult[i + 2] = Convert.ToByte(sum / 9);
                     }
-                    catch {}
+                    catch { }
                 }
             }
 
@@ -835,7 +842,7 @@ namespace Grafika_zad4
                                                                    ImageLockMode.WriteOnly,
                                                                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            Marshal.Copy(pixelBuffer, 0, resultBitmapData.Scan0, pixelBuffer.Length);
+            Marshal.Copy(pixelBufferResult, 0, resultBitmapData.Scan0, pixelBufferResult.Length);
             imgResultBitmap.UnlockBits(resultBitmapData);
             imgResult.Source = ConvertBitmapToImageSource(imgResultBitmap);
         }
@@ -856,10 +863,17 @@ namespace Grafika_zad4
 
             byte[] pixelBuffer = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
             Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
+
+            byte[] pixelBufferResult = new byte[sourceBitmapData.Stride * sourceBitmapData.Height];
+            Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
             imgSourceBitmap.UnlockBits(sourceBitmapData);
 
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
+                pixelBufferResult[i] = 255;
+                pixelBufferResult[i + 1] = 255;
+                pixelBufferResult[i + 2] = 255;
+                pixelBufferResult[i + 3] = 255;
                 // Pierwszy wiersz.
                 if (i <= sourceBitmapData.Stride)
                 {
@@ -873,7 +887,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i] = Convert.ToByte(list.ToArray()[2]);
                         // G
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 1]);
@@ -881,7 +895,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + 1] = Convert.ToByte(list.ToArray()[2]);
                         // R
                         list = new List<byte>(); ;
                         list.Add(pixelBuffer[i + 2]);
@@ -889,7 +903,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + 2] = Convert.ToByte(list.ToArray()[2]);
                         // B
                         list = new List<byte>();
                         list.Add(pixelBuffer[i - 4 + sourceBitmapData.Stride - 4]);
@@ -897,7 +911,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
                         list.Add(pixelBuffer[i + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
                         list.Sort();
-                        pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
                         // G
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4]);
@@ -905,7 +919,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
                         list.Sort();
-                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
                         // R
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4]);
@@ -913,7 +927,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
                         list.Sort();
-                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
                     }
                     // Kazda inna kolumna.
                     else
@@ -927,7 +941,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[3]);
+                        pixelBufferResult[i] = Convert.ToByte(list.ToArray()[3]);
                         // G
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 1 - 4]);
@@ -937,7 +951,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[3]);
+                        pixelBufferResult[i + 1] = Convert.ToByte(list.ToArray()[3]);
                         // R
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 2 - 4]);
@@ -947,7 +961,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[3]);
+                        pixelBufferResult[i + 2] = Convert.ToByte(list.ToArray()[3]);
                     }
                 }
                 // Ostatni wiersz.
@@ -963,7 +977,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i]);
                         list.Add(pixelBuffer[i + 4]);
                         list.Sort();
-                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i] = Convert.ToByte(list.ToArray()[2]);
                         // G
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride]);
@@ -971,7 +985,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 1]);
                         list.Add(pixelBuffer[i + 1 + 4]);
                         list.Sort();
-                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + 1] = Convert.ToByte(list.ToArray()[2]);
                         // R
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride]);
@@ -979,7 +993,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 2]);
                         list.Add(pixelBuffer[i + 2 + 4]);
                         list.Sort();
-                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + 2] = Convert.ToByte(list.ToArray()[2]);
                         // B
                         list = new List<byte>();
                         list.Add(pixelBuffer[i - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
@@ -987,7 +1001,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i - 4]);
                         list.Add(pixelBuffer[i]);
                         list.Sort();
-                        pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
                         // G
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
@@ -995,7 +1009,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 1 - 4 + sourceBitmapData.Stride - 4]);
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4]);
                         list.Sort();
-                        pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
                         // R
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
@@ -1003,7 +1017,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 2 - 4 + sourceBitmapData.Stride - 4]);
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4]);
                         list.Sort();
-                        pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
+                        pixelBufferResult[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[2]);
                     }
                     // Kazda inna kolumna.
                     else
@@ -1017,7 +1031,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i]);
                         list.Add(pixelBuffer[i + 4]);
                         list.Sort();
-                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[3]);
+                        pixelBufferResult[i] = Convert.ToByte(list.ToArray()[3]);
                         // G
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride - 4]);
@@ -1027,7 +1041,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 1]);
                         list.Add(pixelBuffer[i + 1 + 4]);
                         list.Sort();
-                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[3]);
+                        pixelBufferResult[i + 1] = Convert.ToByte(list.ToArray()[3]);
                         // R
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride - 4]);
@@ -1037,7 +1051,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 2]);
                         list.Add(pixelBuffer[i + 2 + 4]);
                         list.Sort();
-                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[3]);
+                        pixelBufferResult[i + 2] = Convert.ToByte(list.ToArray()[3]);
                     }
                 }
                 // Pierwsza kolumna.
@@ -1052,7 +1066,7 @@ namespace Grafika_zad4
                     list.Add(pixelBuffer[i + sourceBitmapData.Stride]);
                     list.Add(pixelBuffer[i + sourceBitmapData.Stride + 4]);
                     list.Sort();
-                    pixelBuffer[i] = Convert.ToByte(list.ToArray()[3]);
+                    pixelBufferResult[i] = Convert.ToByte(list.ToArray()[3]);
                     // G
                     list = new List<byte>();
                     list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride]);
@@ -1062,7 +1076,7 @@ namespace Grafika_zad4
                     list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride]);
                     list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + 4]);
                     list.Sort();
-                    pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[3]);
+                    pixelBufferResult[i + 1] = Convert.ToByte(list.ToArray()[3]);
                     // R
                     list = new List<byte>();
                     list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride]);
@@ -1072,7 +1086,7 @@ namespace Grafika_zad4
                     list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride]);
                     list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + 4]);
                     list.Sort();
-                    pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[3]);
+                    pixelBufferResult[i + 2] = Convert.ToByte(list.ToArray()[3]);
                     // B
                     list = new List<byte>();
                     list.Add(pixelBuffer[i - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
@@ -1082,7 +1096,7 @@ namespace Grafika_zad4
                     list.Add(pixelBuffer[i + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
                     list.Add(pixelBuffer[i + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
                     list.Sort();
-                    pixelBuffer[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
+                    pixelBufferResult[i + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
                     // G
                     list = new List<byte>();
                     list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
@@ -1092,7 +1106,7 @@ namespace Grafika_zad4
                     list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
                     list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
                     list.Sort();
-                    pixelBuffer[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
+                    pixelBufferResult[i + 1 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
                     // R
                     list = new List<byte>();
                     list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
@@ -1102,7 +1116,7 @@ namespace Grafika_zad4
                     list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride - 4 + sourceBitmapData.Stride - 4]);
                     list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + sourceBitmapData.Stride - 4]);
                     list.Sort();
-                    pixelBuffer[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
+                    pixelBufferResult[i + 2 + sourceBitmapData.Stride - 4] = Convert.ToByte(list.ToArray()[3]);
                 }
                 // Ostatnia kolumna.
                 else if ((i - 4) % sourceBitmapData.Stride == 0)
@@ -1125,7 +1139,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i] = Convert.ToByte(list.ToArray()[4]);
+                        pixelBufferResult[i] = Convert.ToByte(list.ToArray()[4]);
                         // G
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 1 - sourceBitmapData.Stride - 4]);
@@ -1138,7 +1152,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + 1 + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i + 1] = Convert.ToByte(list.ToArray()[4]);
+                        pixelBufferResult[i + 1] = Convert.ToByte(list.ToArray()[4]);
                         // R
                         list = new List<byte>();
                         list.Add(pixelBuffer[i + 2 - sourceBitmapData.Stride - 4]);
@@ -1151,7 +1165,7 @@ namespace Grafika_zad4
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride]);
                         list.Add(pixelBuffer[i + 2 + sourceBitmapData.Stride + 4]);
                         list.Sort();
-                        pixelBuffer[i + 2] = Convert.ToByte(list.ToArray()[4]);
+                        pixelBufferResult[i + 2] = Convert.ToByte(list.ToArray()[4]);
                     }
                     catch { }
                 }
@@ -1164,7 +1178,7 @@ namespace Grafika_zad4
                                                                    ImageLockMode.WriteOnly,
                                                                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            Marshal.Copy(pixelBuffer, 0, resultBitmapData.Scan0, pixelBuffer.Length);
+            Marshal.Copy(pixelBufferResult, 0, resultBitmapData.Scan0, pixelBufferResult.Length);
             imgResultBitmap.UnlockBits(resultBitmapData);
             imgResult.Source = ConvertBitmapToImageSource(imgResultBitmap);
         }
@@ -1254,7 +1268,13 @@ namespace Grafika_zad4
                         pixelBufferResult[i + 2] = result;
                         pixelBufferResult[i + 3] = 255;
                     }
-                    catch { }
+                    catch
+                    { 
+                        pixelBufferResult[i] = 0;
+                        pixelBufferResult[i + 1] = 0;
+                        pixelBufferResult[i + 2] = 0;
+                        pixelBufferResult[i + 3] = 255;
+                    }
                 }
             }
 
@@ -1290,13 +1310,14 @@ namespace Grafika_zad4
             Marshal.Copy(sourceBitmapData.Scan0, pixelBuffer, 0, pixelBuffer.Length);
             imgSourceBitmap.UnlockBits(sourceBitmapData);
 
-            for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
-            {
-                int targetValue = (pixelBuffer[i] + pixelBuffer[i + 1] + pixelBuffer[i + 2]) / 3;
-                pixelBuffer[i] = Convert.ToByte(targetValue);
-                pixelBuffer[i + 1] = Convert.ToByte(targetValue);
-                pixelBuffer[i + 2] = Convert.ToByte(targetValue);
-            }
+            //// Wyszarzenie
+            //for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
+            //{
+            //    int targetValue = (pixelBuffer[i] + pixelBuffer[i + 1] + pixelBuffer[i + 2]) / 3;
+            //    pixelBuffer[i] = Convert.ToByte(targetValue);
+            //    pixelBuffer[i + 1] = Convert.ToByte(targetValue);
+            //    pixelBuffer[i + 2] = Convert.ToByte(targetValue);
+            //}
 
             for (int i = 0; i + 4 < pixelBuffer.Length; i += 4)
             {
@@ -1324,24 +1345,76 @@ namespace Grafika_zad4
                 {
                     try
                     {
+                        //// Dla czarnobialego obrazka.
+                        //// Maska
+                        //int sum = 0;
+                        //sum -= pixelBuffer[i - sourceBitmapData.Stride - 4];
+                        //sum -= pixelBuffer[i - sourceBitmapData.Stride];
+                        //sum -= pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        //sum -= pixelBuffer[i - 4];
+                        //sum += 9 * pixelBuffer[i];
+                        //sum -= pixelBuffer[i + 4];
+                        //sum -= pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        //sum -= pixelBuffer[i + sourceBitmapData.Stride];
+                        //sum -= pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        //if (Math.Abs(sum) > 255)
+                        //{
+                        //    sum = 255;
+                        //}
+                        //pixelBufferResult[i] = Convert.ToByte(Math.Abs(sum));
+                        //pixelBufferResult[i + 1] = Convert.ToByte(Math.Abs(sum));
+                        //pixelBufferResult[i + 2] = Convert.ToByte(Math.Abs(sum));
+                        //pixelBufferResult[i + 3] = 255;
+
                         // Maska
-                        int sum = 0;
-                        sum -= pixelBuffer[i - sourceBitmapData.Stride - 4];
-                        sum -= pixelBuffer[i - sourceBitmapData.Stride];
-                        sum -= pixelBuffer[i - sourceBitmapData.Stride + 4];
-                        sum -= pixelBuffer[i - 4];
-                        sum += 9 * pixelBuffer[i];
-                        sum -= pixelBuffer[i + 4];
-                        sum -= pixelBuffer[i + sourceBitmapData.Stride - 4];
-                        sum -= pixelBuffer[i + sourceBitmapData.Stride];
-                        sum -= pixelBuffer[i + sourceBitmapData.Stride + 4];
-                        if (Math.Abs(sum) > 255)
+                        // B
+                        int sumB = 0;
+                        sumB -= pixelBuffer[i - sourceBitmapData.Stride - 4];
+                        sumB -= pixelBuffer[i - sourceBitmapData.Stride];
+                        sumB -= pixelBuffer[i - sourceBitmapData.Stride + 4];
+                        sumB -= pixelBuffer[i - 4];
+                        sumB += 9 * pixelBuffer[i];
+                        sumB -= pixelBuffer[i + 4];
+                        sumB -= pixelBuffer[i + sourceBitmapData.Stride - 4];
+                        sumB -= pixelBuffer[i + sourceBitmapData.Stride];
+                        sumB -= pixelBuffer[i + sourceBitmapData.Stride + 4];
+                        // G
+                        int sumG = 0;
+                        sumG -= pixelBuffer[i+1 - sourceBitmapData.Stride - 4];
+                        sumG -= pixelBuffer[i+1 - sourceBitmapData.Stride];
+                        sumG -= pixelBuffer[i+1 - sourceBitmapData.Stride + 4];
+                        sumG -= pixelBuffer[i+1 - 4];
+                        sumG += 9 * pixelBuffer[i+1];
+                        sumG -= pixelBuffer[i+1 + 4];
+                        sumG -= pixelBuffer[i+1 + sourceBitmapData.Stride - 4];
+                        sumG -= pixelBuffer[i+1 + sourceBitmapData.Stride];
+                        sumG -= pixelBuffer[i+1 + sourceBitmapData.Stride + 4];
+                        // R
+                        int sumR = 0;
+                        sumR -= pixelBuffer[i+2 - sourceBitmapData.Stride - 4];
+                        sumR -= pixelBuffer[i+2 - sourceBitmapData.Stride];
+                        sumR -= pixelBuffer[i+2 - sourceBitmapData.Stride + 4];
+                        sumR -= pixelBuffer[i+2 - 4];
+                        sumR += 9 * pixelBuffer[i+2];
+                        sumR -= pixelBuffer[i+2 + 4];
+                        sumR -= pixelBuffer[i+2 + sourceBitmapData.Stride - 4];
+                        sumR -= pixelBuffer[i+2 + sourceBitmapData.Stride];
+                        sumR -= pixelBuffer[i+2 + sourceBitmapData.Stride + 4];
+                        if (Math.Abs(sumR) > 255)
                         {
-                            sum = 255;
+                            sumR = 255;
                         }
-                        pixelBufferResult[i] = Convert.ToByte(Math.Abs(sum));
-                        pixelBufferResult[i + 1] = Convert.ToByte(Math.Abs(sum));
-                        pixelBufferResult[i + 2] = Convert.ToByte(Math.Abs(sum));
+                        if (Math.Abs(sumG) > 255)
+                        {
+                            sumG = 255;
+                        }
+                        if (Math.Abs(sumB) > 255)
+                        {
+                            sumB = 255;
+                        }
+                        pixelBufferResult[i] = Convert.ToByte(Math.Abs(sumB));
+                        pixelBufferResult[i + 1] = Convert.ToByte(Math.Abs(sumG));
+                        pixelBufferResult[i + 2] = Convert.ToByte(Math.Abs(sumR));
                         pixelBufferResult[i + 3] = 255;
                     }
                     catch { }
